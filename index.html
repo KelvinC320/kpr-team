@@ -5,13 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KPR 业务分工 · 员工会议看板</title>
 <style>
-:root{--bg:#000;--card:#0d0d0d;--border:#1a1a1a;--fg:#e0e0e0;--muted:#888;--cari:#60a5fa;--cici:#4ade80;--kriya:#c084fc;--ding:#fb923c;--rd:#64748b;--li:#fbbf24;--zhang:#f472b6;--big:5mm;}
+:root{--bg:#000;--card:#0d0d0d;--border:#1a1a1a;--fg:#e0e0e0;--muted:#888;--cari:#60a5fa;--cici:#4ade80;--kriya:#c084fc;--ding:#fb923c;--rd:#64748b;--li:#fbbf24;}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Microsoft YaHei','微软雅黑','PingFang SC',sans-serif;background:var(--bg);color:var(--fg);padding:24px 28px;-webkit-font-smoothing:antialiased}
 h1{font-size:28px;font-weight:700;letter-spacing:.02em;margin-bottom:4px}
 h1 .sub{font-weight:400;color:var(--muted);font-size:15px;margin-left:12px}
 h2{font-size:18px;font-weight:700;margin:28px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
-
 .layout{display:grid;grid-template-columns:1fr 1fr;gap:28px}
 .col h2{margin-top:0}
 .col h2 .tag{padding:2px 8px;border-radius:3px;font-size:12px;margin-left:8px;vertical-align:middle}
@@ -25,7 +24,6 @@ h2{font-size:18px;font-weight:700;margin:28px 0 12px;padding-bottom:8px;border-b
 .step .act{font-size:14px;line-height:1.4}
 .step .act .detail{display:block;font-size:11px;color:var(--muted);margin-top:1px;font-weight:400}
 .badge{padding:2px 10px;border-radius:10px;font-size:12px;font-weight:600;white-space:nowrap;flex-shrink:0}
-
 .cari{border-left-color:var(--cari)} .cari .n{background:#1e3a5f;color:var(--cari)} .cari .badge{background:#1e3a5f;color:var(--cari)}
 .cici{border-left-color:var(--cici)} .cici .n{background:#14532d;color:var(--cici)} .cici .badge{background:#14532d;color:var(--cici)}
 .kriya{border-left-color:var(--kriya)} .kriya .n{background:#2d1b4e;color:var(--kriya)} .kriya .badge{background:#2d1b4e;color:var(--kriya)}
@@ -34,9 +32,7 @@ h2{font-size:18px;font-weight:700;margin:28px 0 12px;padding-bottom:8px;border-b
 .li{border-left-color:var(--li)} .li .n{background:#3b2f06;color:var(--li)} .li .badge{background:#3b2f06;color:var(--li)}
 .cari-cici{border-left-color:var(--cari);background:linear-gradient(90deg,var(--card) 0%,#112211 100%)}
 .two .badge{margin-left:4px}
-
 .arrow{text-align:center;padding:1px 0;color:var(--muted);font-size:18px;letter-spacing:-2px;font-weight:300}
-
 .summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:20px}
 .person-card{background:var(--card);border-radius:6px;padding:16px;border:1px solid var(--border)}
 .person-card h3{font-size:16px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
@@ -44,12 +40,37 @@ h2{font-size:18px;font-weight:700;margin:28px 0 12px;padding-bottom:8px;border-b
 .person-card ul{list-style:none;font-size:13px;line-height:1.7}
 .person-card ul li::before{content:'→ ';color:var(--muted)}
 .person-card .tagline{font-size:11px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
-
 .total-bar{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}
 .total-bar .chip{padding:4px 12px;border-radius:12px;font-size:12px;font-weight:600}
+
+/* ---- Login ---- */
+#login{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:999}
+#login .box{background:#0d0d0d;border:1px solid #1a1a1a;border-radius:8px;padding:40px 36px;width:340px;text-align:center}
+#login .box h2{font-size:20px;font-weight:700;margin-bottom:6px;border:none;padding:0}
+#login .box .sub{font-size:12px;color:var(--muted);margin-bottom:24px}
+#login input{display:block;width:100%;padding:10px 12px;margin-bottom:10px;border:1px solid #2a2a2a;border-radius:4px;background:#111;color:#e0e0e0;font-size:14px;font-family:inherit;outline:none}
+#login input:focus{border-color:var(--cari)}
+#login button{width:100%;padding:10px;border:none;border-radius:4px;background:var(--cari);color:#000;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+#login button:hover{opacity:.85}
+#login .err{color:#f87171;font-size:12px;margin-top:8px;display:none}
 </style>
 </head>
 <body>
+
+<!-- Login Overlay -->
+<div id="login">
+<div class="box">
+<h2>KPR 业务分工看板</h2>
+<div class="sub">内部资料 · 请输入密码</div>
+<input type="text" id="lu" placeholder="用户名" autocomplete="off">
+<input type="password" id="lp" placeholder="密码" autocomplete="off">
+<button onclick="doLogin()">进入</button>
+<div class="err" id="lerr">用户名或密码错误</div>
+</div>
+</div>
+
+<!-- App (hidden until login) -->
+<div id="app" style="display:none">
 
 <h1>KPR 业务分工<span class="sub">员工会议看板 · 2027年1月生效</span></h1>
 
@@ -63,11 +84,10 @@ h2{font-size:18px;font-weight:700;margin:28px 0 12px;padding-bottom:8px;border-b
 </div>
 
 <div class="layout">
-<!-- MSL 列 -->
+
 <div class="col">
 <h2>MSL 印尼<span class="tag">本地出货</span></h2>
 <div class="flow">
-
 <div class="step rd"><div class="n">1</div><div class="act">新款建 BOM</div><div class="badge">研发</div></div>
 <div class="arrow">↓</div>
 <div class="step cici"><div class="n">2</div><div class="act">BOM 管理<span class="detail">材料复核 · 不用的形体淘汰</span></div><div class="badge">CICI</div></div>
@@ -85,15 +105,12 @@ h2{font-size:18px;font-weight:700;margin:28px 0 12px;padding-bottom:8px;border-b
 <div class="step cici"><div class="n">8</div><div class="act">出货后通知客户</div><div class="badge">CICI</div></div>
 <div class="arrow">↓</div>
 <div class="step cari"><div class="n">9</div><div class="act">收款催收</div><div class="badge">CARI</div></div>
-
 </div>
 </div>
 
-<!-- 外销列 -->
 <div class="col">
 <h2>外销<span class="tag">成品鞋</span></h2>
 <div class="flow">
-
 <div class="step kriya"><div class="n">1</div><div class="act">企划 · 展会 · 新品<span class="detail">展会资料 · 新品横向推广</span></div><div class="badge">KRIYA</div></div>
 <div class="arrow">↓</div>
 <div class="step rd"><div class="n">2</div><div class="act">新款建 BOM</div><div class="badge">研发</div></div>
@@ -119,74 +136,34 @@ h2{font-size:18px;font-weight:700;margin:28px 0 12px;padding-bottom:8px;border-b
 <div class="step cari"><div class="n">12</div><div class="act">客诉前台<span class="detail">CARI 接待 · 技术判断归研发</span></div><div class="badge">CARI</div></div>
 <div class="arrow">↓</div>
 <div class="step cari"><div class="n">13</div><div class="act">收款催收</div><div class="badge">CARI</div></div>
+</div>
+</div></div>
 
-</div>
-</div>
-</div>
-
-<!-- 按人汇总 -->
 <h2>按人汇总</h2>
 <div class="summary">
-
-<div class="person-card" style="border-left:3px solid var(--cari)">
-<h3><span class="dot" style="background:var(--cari)"></span>CARI 陈瑞勤 · 客户经理</h3>
-<ul>
-<li>MSL：询库存中转、询交期对外回复、对外下单、收款催收</li>
-<li>外销：下样品单、对外接单、ERP 录入、出货单证辅助、出货通知、客诉前台、收款催收</li>
-</ul>
-<div class="tagline">核心：所有对客户的环节全部经过 CARI。沟通 + 客服角色，不做资料核对。</div>
+<div class="person-card" style="border-left:3px solid var(--cari)"><h3><span class="dot" style="background:var(--cari)"></span>CARI 陈瑞勤 · 客户经理</h3><ul><li>MSL：询库存中转、询交期对外回复、对外下单、收款催收</li><li>外销：下样品单、对外接单、ERP 录入、出货单证辅助、出货通知、客诉前台、收款催收</li></ul><div class="tagline">核心：所有对客户的环节全部经过 CARI。沟通 + 客服角色，不做资料核对。</div></div>
+<div class="person-card" style="border-left:3px solid var(--cici)"><h3><span class="dot" style="background:var(--cici)"></span>CICI 崔莹 · 业务后台</h3><ul><li>MSL：BOM 管理、采购/下单/采购价操作、每日库存更新、询交期内对、IF 出货接收、出货通知</li><li>外销：BOM 管理、订单跟进（交期/进度/改期）</li></ul><div class="tagline">核心：所有不对外、有系统兜底的环节。上游推送活，下游有人复核。</div></div>
+<div class="person-card" style="border-left:3px solid var(--kriya)"><h3><span class="dot" style="background:var(--kriya)"></span>KRIYA · 企划与市场开发</h3><ul><li>企划 · 展会资料 · 新品横向推广</li><li>询价</li><li>接样品需求（CARI 下样品单）</li><li>ERP 审单（审得对）</li></ul><div class="tagline">核心：产品端与开发端。外销线的"审单"把关。</div></div>
+<div class="person-card" style="border-left:3px solid var(--ding)"><h3><span class="dot" style="background:var(--ding)"></span>丁敏 · 出货执行</h3><ul><li>外销出货单证全套</li><li>订舱 · 组柜 · 柜检 · CO</li><li>CARI 辅助（出货集中月不可全给丁敏一人）</li></ul><div class="tagline">核心：只要涉及柜子/船/单证，就是丁敏。</div></div>
+<div class="person-card" style="border-left:3px solid var(--rd)"><h3><span class="dot" style="background:var(--rd)"></span>研发</h3><ul><li>MSL 新款建 BOM</li><li>外销新款建 BOM</li><li>客诉技术判断</li></ul><div class="tagline">核心：BOM 源头 + 技术兜底。不做业务判断。</div></div>
+<div class="person-card" style="border-left:3px solid var(--li)"><h3><span class="dot" style="background:var(--li)"></span>李总 · MSL 开发</h3><ul><li>MSL 客户开发 / 询价（日常）</li><li>CARI 可协助，不列入主责流程</li></ul><div class="tagline">核心：MSL 的上游开发端，日常业务归 CARI/CICI。</div></div>
+</div>
 </div>
 
-<div class="person-card" style="border-left:3px solid var(--cici)">
-<h3><span class="dot" style="background:var(--cici)"></span>CICI 崔莹 · 业务后台</h3>
-<ul>
-<li>MSL：BOM 管理、采购/下单/采购价操作、每日库存更新、询交期内对、IF 出货接收、出货通知</li>
-<li>外销：BOM 管理、订单跟进（交期/进度/改期）</li>
-</ul>
-<div class="tagline">核心：所有不对外、有系统兜底的环节。上游推送活，下游有人复核。</div>
-</div>
-
-<div class="person-card" style="border-left:3px solid var(--kriya)">
-<h3><span class="dot" style="background:var(--kriya)"></span>KRIYA · 企划与市场开发</h3>
-<ul>
-<li>企划 · 展会资料 · 新品横向推广</li>
-<li>询价</li>
-<li>接样品需求（CARI 下样品单）</li>
-<li>ERP 审单（审得对）</li>
-</ul>
-<div class="tagline">核心：产品端与开发端。外销线的"审单"把关。</div>
-</div>
-
-<div class="person-card" style="border-left:3px solid var(--ding)">
-<h3><span class="dot" style="background:var(--ding)"></span>丁敏 · 出货执行</h3>
-<ul>
-<li>外销出货单证全套</li>
-<li>订舱 · 组柜 · 柜检 · CO</li>
-<li>CARI 辅助（出货集中月不可全给丁敏一人）</li>
-</ul>
-<div class="tagline">核心：只要涉及柜子/船/单证，就是丁敏。</div>
-</div>
-
-<div class="person-card" style="border-left:3px solid var(--rd)">
-<h3><span class="dot" style="background:var(--rd)"></span>研发</h3>
-<ul>
-<li>MSL 新款建 BOM</li>
-<li>外销新款建 BOM</li>
-<li>客诉技术判断</li>
-</ul>
-<div class="tagline">核心：BOM 源头 + 技术兜底。不做业务判断。</div>
-</div>
-
-<div class="person-card" style="border-left:3px solid var(--li)">
-<h3><span class="dot" style="background:var(--li)"></span>李总 · MSL 开发</h3>
-<ul>
-<li>MSL 客户开发 / 询价（日常）</li>
-<li>CARI 可协助，不列入主责流程</li>
-</ul>
-<div class="tagline">核心：MSL 的上游开发端，日常业务归 CARI/CICI。</div>
-</div>
-
-</div>
-
+<script>
+// --- Login ---
+const U='5e27e72fe6a6e9de179e6d4e9cdfff7b8ed5af29d7b02940bb843bd489ef6409'; // SHA-256("KPR")
+const P='d14aa6bb084722215372f46ca5e0b2c7d59f2e4570ad472b65654bcf3872b0bf'; // SHA-256("jonlong")
+async function sha256(t){const e=new TextEncoder().encode(t);const h=await crypto.subtle.digest('SHA-256',e);return[...new Uint8Array(h)].map(b=>b.toString(16).padStart(2,'0')).join('')}
+async function doLogin(){
+ const u=await sha256(document.getElementById('lu').value);
+ const p=await sha256(document.getElementById('lp').value);
+ if(u===U&&p===P){document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';sessionStorage.setItem('kpr_auth','1')}
+ else{document.getElementById('lerr').style.display='block'}
+}
+document.getElementById('lp').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+// Auto-login if already authed this session
+if(sessionStorage.getItem('kpr_auth')==='1'){document.getElementById('login').style.display='none';document.getElementById('app').style.display='block'}
+</script>
 </body>
 </html>
