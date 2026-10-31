@@ -16,7 +16,6 @@ h2{font-size:18px;font-weight:700;margin:28px 0 12px;padding-bottom:8px;border-b
 .col h2 .tag{padding:2px 8px;border-radius:3px;font-size:12px;margin-left:8px;vertical-align:middle}
 .col:first-child h2 .tag{background:#1e3a5f;color:var(--cari)}
 .col:last-child h2 .tag{background:#2d1b4e;color:var(--kriya)}
-
 .flow{display:flex;flex-direction:column;gap:2px}
 .step{display:grid;grid-template-columns:32px 1fr auto;align-items:center;gap:10px;padding:8px 10px;border-radius:4px;background:var(--card);border-left:3px solid transparent;transition:background .15s}
 .step:hover{background:#141414}
@@ -42,35 +41,13 @@ h2{font-size:18px;font-weight:700;margin:28px 0 12px;padding-bottom:8px;border-b
 .person-card .tagline{font-size:11px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
 .total-bar{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}
 .total-bar .chip{padding:4px 12px;border-radius:12px;font-size:12px;font-weight:600}
-
-/* ---- Login ---- */
-#login{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:999}
-#login .box{background:#0d0d0d;border:1px solid #1a1a1a;border-radius:8px;padding:40px 36px;width:340px;text-align:center}
-#login .box h2{font-size:20px;font-weight:700;margin-bottom:6px;border:none;padding:0}
-#login .box .sub{font-size:12px;color:var(--muted);margin-bottom:24px}
-#login input{display:block;width:100%;padding:10px 12px;margin-bottom:10px;border:1px solid #2a2a2a;border-radius:4px;background:#111;color:#e0e0e0;font-size:14px;font-family:inherit;outline:none}
-#login input:focus{border-color:var(--cari)}
-#login button{width:100%;padding:10px;border:none;border-radius:4px;background:var(--cari);color:#000;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
-#login button:hover{opacity:.85}
-#login .err{color:#f87171;font-size:12px;margin-top:8px;display:none}
+#blocked{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:999}
+#blocked p{color:var(--muted);font-size:16px}
 </style>
 </head>
 <body>
 
-<!-- Login Overlay -->
-<div id="login">
-<div class="box">
-<h2>KPR 业务分工看板</h2>
-<div class="sub">内部资料 · 请输入密码</div>
-<input type="text" id="lu" placeholder="用户名" autocomplete="off">
-<input type="password" id="lp" placeholder="密码" autocomplete="off">
-<button onclick="doLogin()">进入</button>
-<div class="err" id="lerr">用户名或密码错误</div>
-</div>
-</div>
-
-<!-- App (hidden until login) -->
-<div id="app" style="display:none">
+<div id="blocked" style="display:none"><p>访问受限</p></div>
 
 <h1>KPR 业务分工<span class="sub">员工会议看板 · 2027年1月生效</span></h1>
 
@@ -84,7 +61,6 @@ h2{font-size:18px;font-weight:700;margin:28px 0 12px;padding-bottom:8px;border-b
 </div>
 
 <div class="layout">
-
 <div class="col">
 <h2>MSL 印尼<span class="tag">本地出货</span></h2>
 <div class="flow">
@@ -148,22 +124,21 @@ h2{font-size:18px;font-weight:700;margin:28px 0 12px;padding-bottom:8px;border-b
 <div class="person-card" style="border-left:3px solid var(--rd)"><h3><span class="dot" style="background:var(--rd)"></span>研发</h3><ul><li>MSL 新款建 BOM</li><li>外销新款建 BOM</li><li>客诉技术判断</li></ul><div class="tagline">核心：BOM 源头 + 技术兜底。不做业务判断。</div></div>
 <div class="person-card" style="border-left:3px solid var(--li)"><h3><span class="dot" style="background:var(--li)"></span>李总 · MSL 开发</h3><ul><li>MSL 客户开发 / 询价（日常）</li><li>CARI 可协助，不列入主责流程</li></ul><div class="tagline">核心：MSL 的上游开发端，日常业务归 CARI/CICI。</div></div>
 </div>
-</div>
 
 <script>
-// --- Login ---
-const U='5e27e72fe6a6e9de179e6d4e9cdfff7b8ed5af29d7b02940bb843bd489ef6409'; // SHA-256("KPR")
-const P='d14aa6bb084722215372f46ca5e0b2c7d59f2e4570ad472b65654bcf3872b0bf'; // SHA-256("jonlong")
-async function sha256(t){const e=new TextEncoder().encode(t);const h=await crypto.subtle.digest('SHA-256',e);return[...new Uint8Array(h)].map(b=>b.toString(16).padStart(2,'0')).join('')}
-async function doLogin(){
- const u=await sha256(document.getElementById('lu').value);
- const p=await sha256(document.getElementById('lp').value);
- if(u===U&&p===P){document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';sessionStorage.setItem('kpr_auth','1')}
- else{document.getElementById('lerr').style.display='block'}
-}
-document.getElementById('lp').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
-// Auto-login if already authed this session
-if(sessionStorage.getItem('kpr_auth')==='1'){document.getElementById('login').style.display='none';document.getElementById('app').style.display='block'}
+(function(){
+ const p=new URLSearchParams(location.search).get('p');
+ const H='d14aa6bb084722215372f46ca5e0b2c7d59f2e4570ad472b65654bcf3872b0bf'; // SHA-256("jonlong")
+ if(p){
+  crypto.subtle.digest('SHA-256',new TextEncoder().encode(p)).then(h=>{
+   const hex=[...new Uint8Array(h)].map(b=>b.toString(16).padStart(2,'0')).join('');
+   if(hex===H){sessionStorage.setItem('kpr_ok','1');return}
+   document.body.innerHTML='<div style="position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center"><p style="color:#888;font-size:16px">口令错误</p></div>';
+  });
+ }else if(sessionStorage.getItem('kpr_ok')!=='1'){
+  document.body.innerHTML='<div style="position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center"><p style="color:#888;font-size:16px">访问受限</p></div>';
+ }
+})();
 </script>
 </body>
 </html>
