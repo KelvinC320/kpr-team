@@ -128,7 +128,7 @@ h2{font-size:18px;font-weight:700;margin:28px 0 12px;padding-bottom:8px;border-b
 <script>
 (function(){
  const p=new URLSearchParams(location.search).get('p');
- const H='d14aa6bb084722215372f46ca5e0b2c7d59f2e4570ad472b65654bcf3872b0bf'; // SHA-256("jonlong")
+ const H='bbe9c242276b4b3b9aa6ac81cb51a401ccb647db79e1e182927dae8fd8424ada'; // SHA-256("jonlong")
  if(p){
   crypto.subtle.digest('SHA-256',new TextEncoder().encode(p)).then(h=>{
    const hex=[...new Uint8Array(h)].map(b=>b.toString(16).padStart(2,'0')).join('');
